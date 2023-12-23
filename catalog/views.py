@@ -12,6 +12,6 @@ def contacts(request):
         phone = request.POST.get('phone')
         message = request.POST.get('message')
         with open('feedback.txt', 'w') as f:
-            f.write(f'{name} - {phone}, ({message})')
+            f.write(f'User_name: {name}\nContact_number: {phone}\n"{message}"\n')
 
     return render(request, 'catalog/contacts.html')
