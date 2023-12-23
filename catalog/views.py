@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'home/home.html')
+    return render(request, 'catalog/home.html')
 
 
 def contacts(request):
@@ -14,4 +14,4 @@ def contacts(request):
         with open('feedback.txt', 'w') as f:
             f.write(f'{name} - {phone}, ({message})')
 
-    return render(request, 'contacts/contacts.html')
+    return render(request, 'catalog/contacts.html')
