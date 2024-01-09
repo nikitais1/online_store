@@ -1,0 +1,25 @@
+{% extends 'catalog/base.html' %}
+{% load my_tag %}
+{% block content %}
+<div class="row">
+    {% for object in object_list %}
+    <div class="col">
+        <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ object.product_name|title }}</h4>
+            </div>
+            <p class="card-text">{{ object.category|title }}</p>
+            <div class="card-body">
+                <img class="card-img-top"
+                     src="{{ object.image|mymedia }}"
+                     alt="Card image cap">
+                <p class="card-text">{{ object.description|title }}</p>
+                <h1 class="card-title pricing-card-title">{{ object.price_for_one }} руб.<small
+                        class="text-body-secondary fw-light"></small></h1>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
