@@ -1,9 +1,9 @@
 {% extends 'catalog/base.html' %}
 
 {% block content %}
-<div class="row text-center">
+<div class="row">
     {% for object in object_list %}
-        {% include 'catalog/includes/inc_prod.html' %}
+        {% include 'catalog/includes/inc_product.html' %}
     {% endfor %}
 </div>
 {% endblock %}

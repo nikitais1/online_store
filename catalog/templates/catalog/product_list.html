@@ -1,0 +1,30 @@
+{% extends 'catalog/base.html' %}
+{% load my_tag %}
+{% block content %}
+<div class="row">
+    {% for object in object_list %}
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ object.product_name|title }}</h4>
+            </div>
+            <img class="card-img-top"
+                 src="{{ object.image|mymedia }}"
+                 alt="Card image cap">
+            <div class="card-body">
+                <p class="card-text">{{ object.category|title }}</p>
+                <p class="card-text">{{ object.description|my_description }}</p>
+                <h1 class="card-title pricing-card-title">{{ object.price_for_one }} руб.<small
+                        class="text-body-secondary fw-light"></small></h1>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'catalog:view_product' object.pk %}" class="btn btn-sm btn-outline-primary">Посмотреть</a>
+                <a class="btn btn-link" href="{% url 'catalog:product_update' object.pk %}">Изменить</a>
+                <a class="btn btn-outline-danger float-right" href="{% url 'catalog:product_delete' object.pk %}">Удалить</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

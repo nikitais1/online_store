@@ -1,0 +1,33 @@
+{% extends 'catalog/base.html' %}
+{% load my_tag %}
+{% block content %}
+<div class="col-12">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-tite">
+                        {{ object.product_name|title }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <img class="card-img-top"
+                         src="{{ object.image|mymedia }}"
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text">{{ object.category|title }}</p>
+                        <p class="card-text">{{ object.description|my_description }}</p>
+                        <h1 class="card-title pricing-card-title">{{ object.price_for_one }} руб.<small
+                                class="text-body-secondary fw-light"></small></h1>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-link" href="{% url 'catalog:product_update' object.pk %}">Изменить</a>
+                    <a class="btn btn-outline-danger float-right"
+                       href="{% url 'catalog:product_delete' object.pk %}">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

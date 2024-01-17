@@ -1,0 +1,31 @@
+{% extends 'catalog/base.html' %}
+{% load my_tag %}
+{% block content %}
+<div class="col-12">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-tite">
+                        {{ object.title|title }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <img class="card-img-top"
+                         src=" {{ object.preview|mymedia }} "
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text">{{ object.content|title }}</p>
+                        <div class="card-text">Просмотры: {{ object.count_of_views }}</div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-link" href="{% url 'catalog:article_update' object.pk %}">Изменить</a>
+                    <a class="btn btn-outline-danger float-right"
+                    href="{% url 'catalog:article_delete' object.pk %}">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
