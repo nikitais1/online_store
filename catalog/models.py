@@ -1,4 +1,6 @@
 from django.db import models
+from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -20,10 +22,12 @@ class Product(models.Model):
     product_name = models.CharField(max_length=100, verbose_name='Наименование')
     description = models.TextField(verbose_name='Описание', **NULLABLE)
     image = models.ImageField(upload_to='product/', verbose_name='Изображение', **NULLABLE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория', **NULLABLE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория',
+                                 **NULLABLE)
     price_for_one = models.IntegerField(verbose_name='Цена за штуку', **NULLABLE)
     date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    last_modified_date = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
+    last_modified_date = models.DateTimeField(auto_now=True,
+                                              verbose_name='Дата последнего изменения')
 
     def __str__(self):
         return f'{self.product_name} ({self.category})'
@@ -36,7 +40,7 @@ class Product(models.Model):
 
 class Blog(models.Model):
     title = models.CharField(max_length=100, verbose_name='Заголовок', **NULLABLE)
-    slug = models.CharField(max_length=100, verbose_name='slug', **NULLABLE)
+    slug = models.SlugField(max_length=100, verbose_name='URL', **NULLABLE, unique=True)
     content = models.TextField(verbose_name='Содержимое', **NULLABLE)
     preview = models.ImageField(upload_to='blog/', verbose_name='Превью', **NULLABLE)
     date_of_creation = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')

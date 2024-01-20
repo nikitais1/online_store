@@ -3,11 +3,11 @@
 {% block content %}
 <div class="col-12">
     <div class="row">
-        <div class="col-6">
+        <div class="col-20">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-tite">
-                        {{ object.title|title }}
+                        {{ object.title|title }} ({{ object.slug }})
                     </h3>
                 </div>
                 <div class="card-body">
@@ -16,6 +16,8 @@
                          alt="Card image cap">
                     <div class="card-body">
                         <p class="card-text">{{ object.content|title }}</p>
+                    </div>
+                    <div class="card-body">
                         <div class="card-text">Просмотры: {{ object.count_of_views }}</div>
                     </div>
                 </div>

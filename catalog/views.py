@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.defaultfilters import slugify
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, \
     DetailView
@@ -98,7 +99,7 @@ class BlogListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.get(is_publish=True)
+        queryset = queryset.filter(is_publish=True)
         return queryset
 
     def get_context_data(self, *args, **kwargs):
@@ -107,6 +108,7 @@ class BlogListView(ListView):
         category_item = Blog.objects.get(pk=self.kwargs.get('pk'))
         context_data['category_pk'] = category_item.pk
         context_data['title'] = f'{category_item}'.title()
+        context_data['object_list'] = Blog.objects.filter(is_publish=True)
 
         return context_data
 
@@ -141,5 +143,5 @@ class BlogView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['object_list'] = Blog.objects.all()
+        context_data['object_list'] = Blog.objects.filter(is_publish=True)
         return context_data
