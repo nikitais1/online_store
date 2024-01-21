@@ -1,9 +1,12 @@
 {% extends 'catalog/base.html' %}
 {% load my_tag %}
 {% block content %}
+<div class="col">
+    <a class="btn btn-outline-info-link" href="{% url 'catalog:blog' %}">Назад</a>
+</div>
 <div class="col-12">
     <div class="row">
-        <div class="col-20">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-tite">
@@ -24,7 +27,7 @@
                 <div class="card-footer">
                     <a class="btn btn-link" href="{% url 'catalog:article_update' object.pk %}">Изменить</a>
                     <a class="btn btn-outline-danger float-right"
-                    href="{% url 'catalog:article_delete' object.pk %}">Удалить</a>
+                       href="{% url 'catalog:article_delete' object.pk %}">Удалить</a>
                 </div>
             </div>
         </div>

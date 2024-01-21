@@ -104,12 +104,7 @@ class BlogListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
-
-        category_item = Blog.objects.get(pk=self.kwargs.get('pk'))
-        context_data['category_pk'] = category_item.pk
-        context_data['title'] = f'{category_item}'.title()
         context_data['object_list'] = Blog.objects.filter(is_publish=True)
-
         return context_data
 
 
@@ -118,12 +113,17 @@ class BlogCreateView(CreateView):
     fields = ('title', 'slug', 'content', 'preview', 'is_publish',)
     success_url = reverse_lazy('catalog:blog')
 
+    def form_valid(self, form):
+        if form.is_valid():
+            new_mat = form.save()
+            new_mat.slug = slugify(new_mat.title)
+            new_mat.save()
+        return super().form_valid(form)
+
 
 class BlogUpdateView(UpdateView):
     model = Blog
     fields = ('title', 'slug', 'content', 'preview', 'is_publish',)
-
-    success_url = reverse_lazy('catalog:blog')
 
     def get_success_url(self):
         return reverse('catalog:article', args=[self.object.pk])
@@ -133,15 +133,3 @@ class BlogDeleteView(DeleteView):
     model = Blog
 
     success_url = reverse_lazy('catalog:blog')
-
-
-class BlogView(TemplateView):
-    template_name = 'catalog/blog_list.html'
-    extra_context = {
-        'title': 'Блог'
-    }
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        context_data['object_list'] = Blog.objects.filter(is_publish=True)
-        return context_data
