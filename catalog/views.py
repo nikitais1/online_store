@@ -1,10 +1,14 @@
+from django.core.mail import send_mail
+from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, \
     DetailView
 
-from catalog.models import Product, Category, Blog
+from catalog.forms import ProductForm, VersionForm, BlogForm
+from catalog.models import Product, Category, Blog, Version
+from config.settings import EMAIL_HOST_USER
 
 
 class HomeView(TemplateView):
@@ -50,16 +54,34 @@ class ProductListView(ListView):
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ('product_name', 'description', 'image', 'category', 'price_for_one',)
+    form_class = ProductForm
     success_url = reverse_lazy('catalog:categories')
 
 
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ('product_name', 'description', 'image', 'category', 'price_for_one',)
+    form_class = ProductForm
 
     def get_success_url(self):
         return reverse('catalog:category_product', args=[self.object.category.pk])
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == 'POST':
+            context_data['formset'] = VersionFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = VersionFormset(instance=self.object)
+        return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid(form)
 
 
 class ProductDeleteView(DeleteView):
@@ -90,6 +112,9 @@ class BlogDetailView(DetailView):
         self.object = super().get_object(queryset)
         self.object.count_of_views += 1
         self.object.save()
+        if self.object.count_of_views == 100:
+            send_mail(subject="hi there", message="good job", from_email=EMAIL_HOST_USER,
+                      recipient_list=[EMAIL_HOST_USER])
 
         return self.object
 
@@ -110,7 +135,7 @@ class BlogListView(ListView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ('title', 'slug', 'content', 'preview', 'is_publish',)
+    form_class = BlogForm
     success_url = reverse_lazy('catalog:blog')
 
     def form_valid(self, form):
@@ -123,7 +148,7 @@ class BlogCreateView(CreateView):
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ('title', 'slug', 'content', 'preview', 'is_publish',)
+    form_class = BlogForm
 
     def get_success_url(self):
         return reverse('catalog:article', args=[self.object.pk])
