@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import send_mail
 from django.forms import inlineformset_factory
 from django.shortcuts import render
@@ -8,7 +9,6 @@ from django.views.generic import TemplateView, ListView, CreateView, UpdateView,
 
 from catalog.forms import ProductForm, VersionForm, BlogForm
 from catalog.models import Product, Category, Blog, Version
-from config.settings import EMAIL_HOST_USER
 
 
 class HomeView(TemplateView):
@@ -56,6 +56,13 @@ class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:categories')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
 
 
 class ProductUpdateView(UpdateView):
@@ -113,8 +120,8 @@ class BlogDetailView(DetailView):
         self.object.count_of_views += 1
         self.object.save()
         if self.object.count_of_views == 100:
-            send_mail(subject="hi there", message="good job", from_email=EMAIL_HOST_USER,
-                      recipient_list=[EMAIL_HOST_USER])
+            send_mail(subject="hi there", message="good job", from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=[settings.EMAIL_HOST_USER])
 
         return self.object
 

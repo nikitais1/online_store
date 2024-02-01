@@ -13,7 +13,7 @@ class StyleFormMixin:
 class ProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('owner',)
 
     def clean_product_name(self):
         cleaned_data = self.cleaned_data['product_name']
@@ -21,6 +21,14 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
              'радар',)
         if cleaned_data in f:
             raise forms.ValidationError('Недопустимое имя для продукта')
+        return cleaned_data
+
+    def clean_description(self):
+        cleaned_data = self.cleaned_data['description']
+        f = ('казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
+             'радар',)
+        if cleaned_data in f:
+            raise forms.ValidationError('Недопустимое слова для описания продукта')
         return cleaned_data
 
 

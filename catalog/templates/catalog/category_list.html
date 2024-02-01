@@ -2,9 +2,11 @@
 
 {% block content %}
 <div class="row">
+    {% if user.is_authenticated %}
     <div class="col-12 mb-5">
         <a href="{% url 'catalog:product_create' %}" class="btn btn-primary">Создать товар</a>
     </div>
+    {% endif %}
     {% for object in object_list %}
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
