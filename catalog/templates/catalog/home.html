@@ -3,7 +3,9 @@
 {% block content %}
 <div class="row">
     {% for object in object_list %}
+    {% if user.is_authenticated %}
         {% include 'catalog/includes/inc_product.html' %}
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

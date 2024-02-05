@@ -4,12 +4,12 @@
 <div class="row">
     {% if user.is_authenticated %}
     <div class="col-12 mb-5">
-        <a href="{% url 'catalog:product_create' %}" class="btn btn-primary">Создать товар</a>
+        <a href="{% url 'catalog:category_create' %}" class="btn btn-primary">Создать категорию</a>
     </div>
     {% endif %}
     {% for object in object_list %}
     <div class="col-md-4">
-        <div class="card mb-4 box-shadow">
+        <div class="card mb-6 box-shadow">
             <div class="card-header">
                 <h3 class="card-title">
                     {{ object.category_name|title }}
@@ -18,9 +18,18 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                        <a href="{% url 'catalog:category_product' object.pk %}" type="button"
-                           class="btn btn-sm btn-outline-secondary ">Перейти к категории товаров</a>
+                        {{ object.description|title }}
                     </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'catalog:category_product' object.pk %}" type="button"
+                       class="btn btn-sm btn-outline-primary ">Перейти к категории</a>
+                    <a href="{% url 'catalog:category_update' object.pk %}" type="button"
+                       class="btn btn-sm btn-outline-primary ">Изменить</a>
+                    <a href="{% url 'catalog:category_delete' object.pk %}" type="button"
+                       class="btn btn-sm btn-outline-primary ">Удалить</a>
                 </div>
             </div>
         </div>

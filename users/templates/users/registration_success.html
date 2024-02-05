@@ -1,0 +1,7 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+<h1>Поздравляем!</h1>
+<p>Вы успешно зарегистрировались!</p>
+<a href="{% url 'users:login' %}">Войти</a>
+{% endblock %}

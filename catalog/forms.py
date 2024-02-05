@@ -1,6 +1,6 @@
 from django import forms
 
-from catalog.models import Product, Version, Blog
+from catalog.models import Product, Version, Blog, Category
 
 
 class StyleFormMixin:
@@ -8,6 +8,12 @@ class StyleFormMixin:
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+
+class CategoryForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 class ProductForm(StyleFormMixin, forms.ModelForm):
