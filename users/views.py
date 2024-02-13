@@ -1,7 +1,6 @@
 from random import randint
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.sites.shortcuts import get_current_site
@@ -49,19 +48,14 @@ class RegisterView(CreateView):
 class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
-    success_url = reverse_lazy('catalog:home')
-
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_verified:
-            return HttpResponseForbidden("Ваша электронная почта еще не проверена.")
-        return super().dispatch(request, *args, **kwargs)
+    success_url = reverse_lazy('catalog:index')
 
 
 class VerifyEmailView(View):
     def get(self, request, uid, token):
         try:
             user = get_object_or_404(User, pk=uid, verification_token=token)
-            user.is_verified = True
+            user.is_active = True
             user.save()
             return render(request,
                           'users/registration_success.html')
@@ -70,10 +64,11 @@ class VerifyEmailView(View):
 
 
 class CustomPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset.html'
+
     def form_valid(self, form):
         new_password = ''.join([str(randint(0, 9)) for _ in range(12)])
         email = form.cleaned_data['email']
-        User = get_user_model()
         user = User.objects.get(email=email)
         user.set_password(new_password)
         user.save()
@@ -84,5 +79,4 @@ class CustomPasswordResetView(PasswordResetView):
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[user.email]
         )
-
-        return super().form_valid(form)
+        return redirect('users:login')

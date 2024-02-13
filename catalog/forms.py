@@ -1,6 +1,6 @@
 from django import forms
 
-from catalog.models import Product, Version, Blog, Category
+from catalog.models import Product, Version, Category
 
 
 class StyleFormMixin:
@@ -44,7 +44,11 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class BlogForm(StyleFormMixin, forms.ModelForm):
+class ModeratorProductForm(ProductForm):
+    """
+    Класс создания формы для редактирования модератором
+    """
+
     class Meta:
-        model = Blog
-        exclude = ('count_of_views',)
+        model = Product
+        fields = ('description', 'category', 'is_published')

@@ -2,7 +2,7 @@
 {% load my_tag %}
 {% block content %}
 <div class="col">
-    <a class="btn btn-outline-info-link" href="{% url 'catalog:blog' %}">Назад</a>
+    <a class="btn btn-outline-info-link" href="{% url 'blog:blog' %}">Назад</a>
 </div>
 <div class="col-12">
     <div class="row">
@@ -25,9 +25,9 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a class="btn btn-link" href="{% url 'catalog:article_update' object.pk %}">Изменить</a>
+                    <a class="btn btn-link" href="{% url 'blog:article_update' object.pk %}">Изменить</a>
                     <a class="btn btn-outline-danger float-right"
-                       href="{% url 'catalog:article_delete' object.pk %}">Удалить</a>
+                       href="{% url 'blog:article_delete' object.pk %}">Удалить</a>
                 </div>
             </div>
         </div>

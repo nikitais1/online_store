@@ -2,7 +2,7 @@
 {% load my_tag %}
 {% block content %}
 <div class="col-12 mb-5">
-    <a href="{% url 'catalog:blog_create' %}" class="btn btn-primary">Написать статью</a>
+    <a href="{% url 'blog:blog_create' %}" class="btn btn-primary">Написать статью</a>
 </div>
     <div class="row">
         {% for object in object_list %}
@@ -20,7 +20,7 @@
                     <p class="card-text">{{ object.content|my_description }}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <a href="{% url 'catalog:article' object.pk %}" type="button"
+                            <a href="{% url 'blog:article' object.pk %}" type="button"
                                class="btn btn-sm btn-outline-secondary ">Читать</a>
                         </div>
                     </div>
