@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.forms import inlineformset_factory
 from django.http import Http404
 from django.shortcuts import render
@@ -15,21 +16,19 @@ from catalog.models import Product, Category, Version
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset
+
 
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
-
-    def get_queryset(self):
-        return super().get_queryset().filter(
-            category_id=self.kwargs.get('pk'),
-            owner=self.request.user
-        )
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
-    success_url = reverse_lazy('catalog:categories')
+    success_url = reverse_lazy('catalog:index')
 
     def form_valid(self, form):
         self.object = form.save()
